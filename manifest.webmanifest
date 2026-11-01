@@ -1,0 +1,11 @@
+{
+  "name": "Packaging Sustainability Opportunity Explorer",
+  "short_name": "Waste Explorer",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#10262a",
+  "background_color": "#f5f8f6",
+  "icons": [{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

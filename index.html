@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10262a">
+  <meta name="description" content="Evidence-traceable packaging waste baseline and intervention scenario calculator. Screening only, not LCA or change authorization.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Packaging Sustainability Opportunity Explorer · V0.1</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a href="./" class="brand" aria-label="Packaging Sustainability Opportunity Explorer home">
+        <span class="brand-logo" aria-hidden="true">P<span>∕</span>S</span>
+        <span class="brand-copy"><strong>Packaging Sustainability</strong><small>Opportunity Explorer</small></span>
+      </a>
+      <div class="header-right"><span class="version-tag">V0.1 · Screening model</span><span class="privacy-dot" title="Runs locally in your browser"></span> Local calculations</div>
+    </div>
+  </header>
+  <main id="main" class="wrap">
+    <section class="hero">
+      <div class="eyebrow">QUANTIFY FIRST · INTERVENE SECOND</div>
+      <h1>Find preventable waste.<br><em>Show your assumptions.</em></h1>
+      <p>Audit component flows, estimate feasible prevention scenarios, and identify evidence and quality-system questions before making a change.</p>
+      <div class="hero-caveat"><strong>Boundary:</strong> material waste only. No CO₂ calculation, life-cycle equivalence, clinical suitability assessment, or change approval.</div>
+    </section>
+    <div id="notice" role="status" aria-live="polite"></div>
+    <section class="workspace-bar" aria-label="Project controls">
+      <div class="workspace-name"><label for="projectName">Assessment</label><input id="projectName" type="text" maxlength="120" aria-label="Assessment title"></div>
+      <div class="period-control"><label for="periodMonths">Assessment period</label><div class="period-input"><input id="periodMonths" type="number" min="1" max="120" step="1" value="12"><span>months</span></div></div>
+      <div class="workspace-actions"><button id="demoBtn" class="btn btn-ghost" type="button">Load example</button><button id="exportJsonBtn" class="btn btn-light" type="button">Save JSON</button><label class="btn btn-light file-button" for="importJson">Open JSON<input id="importJson" type="file" accept=".json,application/json" hidden></label></div>
+    </section>
+    <nav class="tabs" aria-label="Explorer sections"><button class="tab active" data-tab="baseline" aria-current="page">01 / Baseline</button><button class="tab" data-tab="scenario">02 / Scenarios</button><button class="tab" data-tab="results">03 / Results</button><button class="tab" data-tab="methodology">04 / Methodology</button></nav>
+    <section id="summary" aria-label="Current assessment totals"></section>
+    <section id="tab-baseline" class="tab-panel" aria-labelledby="baseline-title">
+      <div class="section-intro"><div><div class="kicker">STEP 01</div><h2 id="baseline-title">Establish a defensible baseline</h2><p>Keep beginning inventory, purchases, released-product consumption, scrap and closing inventory in the <strong>same assessment period</strong>.</p></div><button id="addComponentBtn" type="button" class="btn btn-dark">+ Add component</button></div>
+      <div id="components"></div>
+    </section>
+    <section id="tab-scenario" class="tab-panel" hidden>
+      <div class="section-intro"><div><div class="kicker">STEP 02</div><h2>Model a process change</h2><p>Set a reduction percentage <strong>only against avoidable waste</strong>. Necessary process consumption and usable inventory are excluded from estimated savings.</p></div></div>
+      <div id="scenarioCards"></div>
+    </section>
+    <section id="tab-results" class="tab-panel" hidden>
+      <div class="section-intro"><div><div class="kicker">STEP 03</div><h2>Review opportunities and evidence</h2><p>Outputs are scenario estimates, not realized savings. Components failing inventory reconciliation are excluded from the quantitative totals.</p></div><div class="action-row"><button id="exportCsvBtn" type="button" class="btn btn-dark">Export results CSV</button><button id="printBtn" type="button" class="btn btn-light">Print view</button></div></div>
+      <div id="resultsPanel"></div>
+    </section>
+    <section id="tab-methodology" class="tab-panel" hidden>
+      <div class="section-intro"><div><div class="kicker">STEP 04</div><h2>Methodology and interpretation</h2><p>An intentionally narrow mass-balance and scenario model, suitable for early opportunity screening.</p></div></div>
+      <div class="method-grid">
+        <article class="method-card"><h3>1. Reconcile first</h3><p><code>Opening + Purchases = Applied + Scrap + Closing + Other</code></p><p>“Other” covers documented transfers or adjustments. An unmatched flow excludes that component from aggregate opportunity estimates.</p></article>
+        <article class="method-card"><h3>2. Separate sources of waste</h3><p><code>Avoidable = max(0, Confirmed scrap − Necessary process use)</code></p><p>Closing stock that is still usable is <strong>not</strong> confirmed waste. The at-risk quantity is reported separately and is never added to avoided scrap.</p></article>
+        <article class="method-card"><h3>3. Model an intervention</h3><p><code>Prevented units = Avoidable units × Assumed reduction %</code></p><p><code>Prevented mass (kg) = Prevented units × grams/unit ÷ 1000</code></p><p>Annual values are normalized by multiplying the assessed-period result by 12 / assessment months.</p></article>
+        <article class="method-card"><h3>4. Interpret financial values</h3><p><code>Gross avoided material value = Prevented units × Unit material cost</code></p><p>This does not represent net savings or ROI. MOQ, new equipment, labor, validation, yield effects, logistics, and disposal costs are not included.</p></article>
+        <article class="method-card"><h3>5. Quality-system gates</h3><p>Flag changes affecting labels/UDI, sterile barriers, package protection, and validated equipment or software. These are review triggers; an unchecked box is not an approval or assurance of no impact.</p></article>
+        <article class="method-card"><h3>6. Evidence quality</h3><p>Identify the input provenance (measured, documented estimate, or illustrative) and record the source. Scenario percentages are always assumptions until confirmed by an appropriately controlled pilot.</p></article>
+      </div>
+      <div class="footnote-box"><strong>Source framework:</strong> C. Patadiya, <em>The Label Nobody Counted</em> (Healthcare Packaging, 2026); Smithers sustainability printing research and Smithers presentation on demand-triggered labels; general material-balance accounting. This V0.1 does not implement the published Smithers study’s scenario-specific scrap/energy coefficients. The underlying methods are described in <code>METHODOLOGY.md</code> in the source package.</div>
+    </section>
+    <footer><span>Engineering screening / preliminary estimates only · V0.1</span><span>Local-browser storage; no analytics, server uploads or external libraries. Avoid entering proprietary data on an unapproved device.</span><button id="clearBtn" type="button" class="text-button">Clear saved assessment</button></footer>
+  </main>
+  <script src="./core.js" defer></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>
